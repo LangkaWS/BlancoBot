@@ -18,5 +18,8 @@
   "homepage": "https://github.com/LangkaWS/BlancoBot#readme",
   "dependencies": {
     "discord.js": "^14.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0"
   }
 }
