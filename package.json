@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/LangkaWS/BlancoBot/issues"
   },
-  "homepage": "https://github.com/LangkaWS/BlancoBot#readme"
+  "homepage": "https://github.com/LangkaWS/BlancoBot#readme",
+  "dependencies": {
+    "discord.js": "^14.2.0"
+  }
 }
