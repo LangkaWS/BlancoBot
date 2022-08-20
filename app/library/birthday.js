@@ -5,10 +5,10 @@ const messageHelper = require('../helper/message');
 const { Birthday, Main } = require('../language/fr.json');
 
 /**
- * Add or edit the member birthday.
+ * Add or edit the member's birthday.
  * @param {CommandInteraction} interaction
  */
-const addBirthday = async (interaction) => {
+const manageBirthday = async (interaction) => {
 
 	try {
 
@@ -39,18 +39,7 @@ const addBirthday = async (interaction) => {
 
 		} else {
 
-			const day = interaction.options.getInteger(Birthday.DayOptionName);
-			const month = interaction.options.getInteger(Birthday.MonthOptionName);
-
-			await databaseHelper.insertBirthday(guild.id, memberId, day, month);
-
-			const embedSuccessOptions = {
-				type: 'BIRTHDAY',
-				message: Birthday.AddConfirm,
-			};
-
-			messageHelper.createReply(interaction, embedSuccessOptions, null);
-			return;
+			addBirthday(interaction);
 
 		}
 
@@ -61,7 +50,36 @@ const addBirthday = async (interaction) => {
 };
 
 /**
- * Edit the member birthday.
+ * Add the member's birthday.
+ * @param {CommandInteraction} interaction
+ */
+const addBirthday = async (interaction) => {
+
+	try {
+
+		const day = interaction.options.getInteger(Birthday.DayOptionName);
+		const month = interaction.options.getInteger(Birthday.MonthOptionName);
+
+		await databaseHelper.insertBirthday(interaction.guild.id, interaction.member.id, day, month);
+
+		const embedSuccessOptions = {
+			type: 'BIRTHDAY',
+			message: Birthday.AddConfirm,
+		};
+
+		messageHelper.createReply(interaction, embedSuccessOptions, null);
+		return;
+
+	} catch (error) {
+
+		console.log(error);
+
+	}
+
+};
+
+/**
+ * Edit the member's birthday.
  * @param {CommandInteraction} interaction
  * @param {{ day: number, month: number }} memberBirthday the day and month of member's birthday
  */
@@ -119,5 +137,5 @@ const editBirthday = async (interaction, memberBirthday) => {
 };
 
 module.exports = {
-	addBirthday,
+	manageBirthday,
 };

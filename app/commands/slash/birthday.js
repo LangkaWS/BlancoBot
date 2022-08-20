@@ -35,7 +35,7 @@ const execute = async (interaction) => {
 	const subcommand = interaction.options.getSubcommand();
 	switch (subcommand) {
 		case Birthday.SubcommandAddName:
-			await birthdayLibrary.addBirthday(interaction);
+			await birthdayLibrary.manageBirthday(interaction);
 			break;
 		case Birthday.SubcommandRemoveName:
 			await birthdayLibrary.removeBirthday(interaction);
