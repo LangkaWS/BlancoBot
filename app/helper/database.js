@@ -4,16 +4,31 @@
  */
 const getConnection = async () => {
 
-	const mysql = require('mysql2/promise');
+	try {
 
-	return await mysql.createConnection({
-		host: process.env.DB_HOST,
-		port: process.env.DB_PORT,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASSWORD,
-		database: process.env.DB_NAME,
-	});
+		const mysql = require('mysql2/promise');
 
+		return await mysql.createConnection({
+			host: process.env.DB_HOST,
+			port: process.env.DB_PORT,
+			user: process.env.DB_USER,
+			password: process.env.DB_PASSWORD,
+			database: process.env.DB_NAME,
+		});
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
+
+};
+
+/**
+ * Create a new SQL exception.
+ * @param {string} message the error message
+ */
+const SQLException = (message) => {
+	this.name = 'SQLException';
+	this.message = message;
 };
 
 /**
@@ -32,10 +47,11 @@ const executeQuery = async (query, ...args) => {
 		return records;
 
 	} catch (error) {
-		console.error(error);
+		throw new SQLException(error);
 	} finally {
 		con.end;
 	}
+
 };
 
 /**
@@ -47,17 +63,23 @@ const executeQuery = async (query, ...args) => {
  */
 const insertBirthday = async (guildId, memberId, day, month) => {
 
-	const query = `
-		INSERT INTO
-			birthday
-		SET
-			guild_id = ?,
-			member_id = ?,
-			day = ?,
-			month = ?
-	`;
+	try {
 
-	await executeQuery(query, guildId, memberId, day, month);
+		const query = `
+			INSERT INTO
+				birthday
+			SET
+				guild_id = ?,
+				member_id = ?,
+				day = ?,
+				month = ?
+		`;
+
+		await executeQuery(query, guildId, memberId, day, month);
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
 
 };
 
@@ -70,16 +92,25 @@ const insertBirthday = async (guildId, memberId, day, month) => {
  */
 const updateBirthday = async (guildId, memberId, day, month) => {
 
-	const query = `
-		UPDATE
-			birthday
-		SET
-			day = ?,
-			month = ?
-		WHERE member_id = ? and guild_id = ?
-	`;
+	try {
 
-	await executeQuery(query, day, month, memberId, guildId);
+		const query = `
+			UPDATE
+				birthday
+			SET
+				day = ?,
+				month = ?
+			WHERE 
+				guild_id = ?
+				AND member_id = ? 
+		`;
+
+		await executeQuery(query, day, month, guildId, memberId);
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
+
 
 };
 
@@ -90,42 +121,57 @@ const updateBirthday = async (guildId, memberId, day, month) => {
  */
 const getBirthdayConf = async (guildId) => {
 
-	const query = `
-		SELECT
-			guild_id AS guildId,
-			channel_id AS channelId,
-			message,
-			enabled
-		FROM
-			conf_birthdays
-		WHERE
-			guild_id = ?
-	`;
+	try {
 
-	return await executeQuery(query, guildId);
+		const query = `
+			SELECT
+				guild_id AS guildId,
+				channel_id AS channelId,
+				message,
+				enabled
+			FROM
+				conf_birthdays
+			WHERE
+				guild_id = ?
+		`;
+
+		const [record] = await executeQuery(query, guildId);
+		return record;
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
 
 };
 
 /**
  * Get the birthday (month and day) of a member
- * @param {GuildMember} memberId the ID of the member
+ * @param {number} memberId the ID of the member
+ * @param {number} guildId the ID of the guild
  * @returns the month and day of the member birthday
  */
 const getMemberBirthday = async (memberId, guildId) => {
 
-	const query = `
-		SELECT
-			month,
-			day
-		FROM
-			birthday
-		WHERE
-			member_id = ?
-			AND guild_id = ?
-	`;
+	try {
 
-	const [record] = await executeQuery(query, memberId, guildId);
-	return record;
+		const query = `
+			SELECT
+				month,
+				day
+			FROM
+				birthday
+			WHERE
+				guild_id = ?
+				AND member_id = ?
+		`;
+
+		const [record] = await executeQuery(query, guildId, memberId);
+		return record;
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
+
 
 };
 
