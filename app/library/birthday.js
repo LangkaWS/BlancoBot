@@ -311,6 +311,7 @@ const removeBirthday = async (interaction) => {
 };
 
 module.exports = {
+	configure,
 	manageBirthday,
 	removeBirthday,
 };
