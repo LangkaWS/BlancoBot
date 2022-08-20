@@ -11,6 +11,8 @@
 		"EmbedConfigurationTitle": "🥳 Configuration des anniversaires",
 		"MonthOptionName": "mois",
 		"MonthOptionDescription": "Entre le mois (entre 1 et 12)",
+		"NoBirthdayFound": "Tu n'as pas d'anniversaire enregistré.",
+		"RemoveConfirm": "Ton anniversaire a bien été supprimé.",
 		"SubcommandAddName": "ajouter",
 		"SubcommandAddDescription": "Ajoute ou modifie ton anniversaire",
 		"SubcommandRemoveName": "retirer",

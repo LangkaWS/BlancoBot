@@ -111,6 +111,31 @@ const updateBirthday = async (guildId, memberId, day, month) => {
 		throw new SQLException(error);
 	}
 
+};
+
+/**
+ * Delete the member's birthday from database.
+ * @param {number} guildId the guild ID
+ * @param {number} memberId the member ID
+ */
+const deleteBirthday = async (guildId, memberId) => {
+
+	try {
+
+		const query = `
+			DELETE FROM
+				birthday
+			WHERE 
+				guild_id = ?
+				AND member_id = ? 
+		`;
+
+		await executeQuery(query, guildId, memberId);
+
+	} catch (error) {
+		throw new SQLException(error);
+	}
+
 
 };
 
@@ -176,6 +201,7 @@ const getMemberBirthday = async (guildId, memberId) => {
 };
 
 module.exports = {
+	deleteBirthday,
 	insertBirthday,
 	getBirthdayConf,
 	getMemberBirthday,

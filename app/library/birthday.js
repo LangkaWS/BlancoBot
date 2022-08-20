@@ -156,6 +156,63 @@ const editBirthday = async (interaction, memberBirthday) => {
 
 };
 
+/**
+ * Remove the member's birthday.
+ * @param {CommandInteraction} interaction
+ */
+const removeBirthday = async (interaction) => {
+
+	try {
+
+		const guild = interaction.guild;
+
+		// Check if birthday feature has been configured
+		const isCurrentSetup = await checkSetup(interaction);
+
+		if (!isCurrentSetup) {
+			const embedNoSetupOptions = {
+				type: 'BIRTHDAY',
+				message: Main.NoSetup,
+			};
+
+			messageHelper.createReply(interaction, embedNoSetupOptions, null);
+			return;
+		}
+
+		// Get member birthday
+		const memberId = interaction.member.id;
+		const memberBirthday = await databaseHelper.getMemberBirthday(guild.id, memberId);
+
+		if (!memberBirthday) {
+
+			const embedNoBirthdayFoundOptions = {
+				type: 'BIRTHDAY',
+				message: Birthday.NoBirthdayFound,
+			};
+
+			messageHelper.createReply(interaction, embedNoBirthdayFoundOptions, null);
+			return;
+
+		}
+
+		await databaseHelper.deleteBirthday(guild.id, memberId);
+
+		const embedSuccessOptions = {
+			type: 'BIRTHDAY',
+			message: Birthday.RemoveConfirm,
+		};
+
+		messageHelper.createReply(interaction, embedSuccessOptions, null);
+
+	} catch (error) {
+
+		console.log(error);
+
+	}
+
+};
+
 module.exports = {
 	manageBirthday,
+	removeBirthday,
 };

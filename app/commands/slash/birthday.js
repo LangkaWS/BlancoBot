@@ -24,7 +24,11 @@ const data = new SlashCommandBuilder()
 					.setDescription(Birthday.MonthOptionDescription)
 					.setRequired(true)
 					.setMinValue(1)
-					.setMaxValue(12)));
+					.setMaxValue(12)))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName(Birthday.SubcommandRemoveName)
+			.setDescription(Birthday.SubcommandRemoveDescription));
 
 /**
  * Execute the slash command.
