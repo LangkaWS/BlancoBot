@@ -2,15 +2,18 @@ module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
 
-		if (!interaction.isChatInputCommand()) return;
-
-		const command = interaction.client.commands.get(interaction.commandName);
-
-		if (!command) return;
-
 		try {
 
-			await command.execute(interaction);
+			if (interaction.isChatInputCommand()) {
+
+				const command = interaction.client.commands.get(interaction.commandName);
+				if (!command) return;
+				await command.execute(interaction);
+				return;
+
+			}
+
+			interaction.deferUpdate();
 
 		} catch (error) {
 			console.error(error);
