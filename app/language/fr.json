@@ -2,8 +2,13 @@
 	"Birthday": {
 		"AddConfirm": "Ton anniversaire a bien été ajouté.",
 		"AlreadyRegistered": "Ton anniversaire est déjà enregistré avec la date : [date].\rVeux-tu le modifier ?",
+		"AskEditConfiguration": "Mon service \"Annonce des anniversaires\" est configuré de la façon suivante :\rCanal d'annonce : <#[channel]>\rMessage d'annonce :\r[message]\n\rVeux-tu modifier cette configuration ?\rNote : Pour modifier le canal, cliques sur \"Non\" puis refais la commande dans le canal dans lequel tu veux que j'annonce les anniversaires.",
+		"AskMessagePlaceholder": "Tu peux utiliser {name} (pseudo du membre) pour personnaliser le message. Ex : 'Joyeux anniv {name}'",
+		"AskMessageLabel": "Quel message dois-je utiliser ?",
+		"AskMessageTitle": "Message d'annonce",
 		"CommandName": "anniversaire",
-		"CommandDescription": "Ajoute ou enlève ton anniversaire !",
+		"CommandDescription": "Ajoutes ou enlèves ton anniversaire",
+		"ConfigureCommandDescription": "Configure la fonctionnalité \"Anniversaires\". J'utiliserai ce canal pour annoncer les anniversaires.",
 		"DayOptionName": "jour",
 		"DayOptionDescription": "Saisis le jour (entre 1 et 31)",
 		"EditConfirm": "Ton anniversaire a bien été modifié.",	
@@ -17,13 +22,13 @@
 		"SubcommandAddName": "ajouter",
 		"SubcommandAddDescription": "Ajoute ou modifie ton anniversaire",
 		"SubcommandRemoveName": "retirer",
-		"SubcommandRemoveDescription": "Retire ton anniversaire"
+		"SubcommandRemoveDescription": "Retire ton anniversaire",
 		"ConfigConfirm": "La nouvelle configuration des anniversaires a bien été enregistrée."
 	},
 	"Main": {
 		"CancelConfig": "La configuration est annulée.",
 		"ConfigureCommandName": "configurer",
-		"ConfigureCommandDescription": "Configures Blanco sur ton serveur",
+		"ConfigureCommandDescription": "Configure Blanco sur ton serveur",
 		"InteractionTimeout": "Tu as mis trop de temps pour répondre à l'interaction.\rL'interaction est annulée.",
 		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité."
 	}
