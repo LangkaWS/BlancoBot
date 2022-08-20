@@ -1,0 +1,24 @@
+{
+	"Birthday": {
+		"AddConfirm": "Ton anniversaire a bien été ajouté.",
+		"AlreadyRegistered": "Ton anniversaire est déjà enregistré avec la date : [date].\rVeux-tu le modifier ?",
+		"CommandName": "anniversaire",
+		"CommandDescription": "Ajoute ou enlève ton anniversaire !",
+		"DayOptionName": "jour",
+		"DayOptionDescription": "Entre le jour (entre 1 et 31)",
+		"EditConfirm": "Ton anniversaire a bien été modifié.",	
+		"EmbedAnnounceTitle": "🥳 Joyeux anniversaire !",
+		"EmbedConfigurationTitle": "🥳 Configuration des anniversaires",
+		"MonthOptionName": "mois",
+		"MonthOptionDescription": "Entre le mois (entre 1 et 12)",
+		"SubcommandAddName": "ajouter",
+		"SubcommandAddDescription": "Ajoute ou modifie ton anniversaire",
+		"SubcommandRemoveName": "retirer",
+		"SubcommandRemoveDescription": "Retire ton anniversaire"
+	},
+	"Main": {
+		"CancelConfig": "La configuration est annulée.",
+		"InteractionTimeout": "Tu as mis trop de temps pour répondre à l'interaction.\rL'interaction est annulée.",
+		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité."
+	}
+}
