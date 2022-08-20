@@ -1,3 +1,5 @@
+const { Birthday, Main } = require('../language/fr.json');
+
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
@@ -11,6 +13,12 @@ module.exports = {
 				await command.execute(interaction);
 				return;
 
+			}
+
+			const originalCommandName = interaction.message.interaction.commandName;
+
+			if (interaction.isButton() && originalCommandName === `${Main.ConfigureCommandName} ${Birthday.CommandName}`) {
+				return;
 			}
 
 			interaction.deferUpdate();

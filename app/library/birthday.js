@@ -5,6 +5,104 @@ const messageHelper = require('../helper/message');
 const { Birthday, Main } = require('../language/fr.json');
 
 /**
+ * Configure birthday feature on the guild.
+ * @param {CommandInteraction} interaction
+ */
+const configure = async (interaction) => {
+
+	try {
+
+		const guildId = interaction.guildId;
+
+		// Get current configuration
+		const currentConf = await databaseHelper.getBirthdayConfiguration(guildId);
+		const isCurrentConf = Boolean(currentConf);
+
+		// Ask user if he wants to create or edit current configuration
+		const messageAskEditConf = isCurrentConf
+			?	languageHelper.interpolate(Birthday.AskEditConfiguration, {
+				channel: currentConf.channelId,
+				message: currentConf.message,
+			})
+			: Birthday.NoSetup;
+
+		const embedOptionsAskEditConf = {
+			type: 'BIRTHDAY',
+			message: messageAskEditConf,
+		};
+
+		const buttonsOptionsAskEditConfOptions = messageHelper.createYesNoButtonsOptions();
+
+		const replyAskEditConf = await messageHelper.createReply(interaction, embedOptionsAskEditConf, buttonsOptionsAskEditConfOptions, true);
+
+		// If no, cancel
+		if (replyAskEditConf.customId !== 'yes') {
+
+			const embedOptionsCancel = {
+				type: 'BIRTHDAY',
+				message: Main.CancelConfig,
+			};
+
+			messageHelper.createReply(interaction, embedOptionsCancel, null);
+			return;
+
+		}
+
+		// Ask message
+		const modalOptionsAskEditMessage = {
+			id: 'modal',
+			title: Birthday.AskMessageTitle,
+			textInputsOptions: [],
+		};
+
+		modalOptionsAskEditMessage.textInputsOptions.push({
+			id: 'message',
+			label: Birthday.AskMessageLabel,
+			placeholder: Birthday.AskMessagePlaceholder,
+		});
+
+		// Disable buttons from previous interaction
+		buttonsOptionsAskEditConfOptions.forEach(button => button.disabled = true);
+
+		const replyAskMessage = await messageHelper.createModalReply(interaction, embedOptionsAskEditConf, buttonsOptionsAskEditConfOptions, replyAskEditConf, modalOptionsAskEditMessage);
+
+		const replyAskMessageValue = replyAskMessage.fields.getTextInputValue('message');
+
+		if (!replyAskMessageValue) {
+			const embedOptionsCancel = {
+				type: 'BIRTHDAY',
+				message: Main.CancelConfig,
+			};
+
+			messageHelper.createReply(interaction, embedOptionsCancel, null);
+			return;
+		}
+
+		if (isCurrentConf) {
+
+			await databaseHelper.updateBirthdayConfiguration(guildId, interaction.channelId, replyAskMessageValue);
+
+		} else {
+
+			await databaseHelper.insertBirthdayConfiguration(guildId, interaction.channelId, replyAskMessageValue);
+
+		}
+
+		const embedSuccessOptions = {
+			type: 'BIRTHDAY',
+			message: Birthday.ConfigConfirm,
+		};
+
+		messageHelper.createReply(interaction, embedSuccessOptions, null);
+
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
+/**
  * Check if the guild has configured the birthday feature.
  * @param {CommandInteraction} interaction
  * @returns `true` if birthday feature is setup on the guild, `false` otherwise

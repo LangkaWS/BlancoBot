@@ -84,6 +84,34 @@ const insertBirthday = async (guildId, memberId, day, month) => {
 };
 
 /**
+ * Insert a birthday configuration in databse.
+ * @param {number} guildId the guild ID
+ * @param {number} channelId the announcement channel ID
+ * @param {string} message the announcement message
+ */
+const insertBirthdayConfiguration = async (guildId, channelId, message) => {
+
+	try {
+
+		const query = `
+			INSERT INTO
+				conf_birthday
+			SET
+				guild_id = ?,
+				channel_id = ?,
+				message = ?,
+				enabled = 1
+		`;
+
+		await executeQuery(query, guildId, channelId, message);
+
+	} catch (error) {
+		throw SQLException(error);
+	}
+
+};
+
+/**
  * Update the member's birthday in database.
  * @param {number} guildId the ID of the member's guild
  * @param {number} memberId the ID of the member
@@ -106,6 +134,34 @@ const updateBirthday = async (guildId, memberId, day, month) => {
 		`;
 
 		await executeQuery(query, day, month, guildId, memberId);
+
+	} catch (error) {
+		throw SQLException(error);
+	}
+
+};
+
+/**
+ * Update birthday configuration in database.
+ * @param {number} guildId the guild ID
+ * @param {number} channelId the announcement channel ID
+ * @param {string} message the announcement message
+ */
+const updateBirthdayConfiguration = async (guildId, channelId, message) => {
+
+	try {
+
+		const query = `
+			UPDATE
+				conf_birthday
+			SET
+				channel_id = ?,
+				message = ?
+			WHERE 
+				guild_id = ?
+		`;
+
+		await executeQuery(query, channelId, message, guildId);
 
 	} catch (error) {
 		throw SQLException(error);
@@ -144,7 +200,7 @@ const deleteBirthday = async (guildId, memberId) => {
  * @param {number} guildId the ID of the guild the configuration belongs to
  * @returns the birthday configuration
  */
-const getBirthdayConf = async (guildId) => {
+const getBirthdayConfiguration = async (guildId) => {
 
 	try {
 
@@ -155,7 +211,7 @@ const getBirthdayConf = async (guildId) => {
 				message,
 				enabled
 			FROM
-				conf_birthdays
+				conf_birthday
 			WHERE
 				guild_id = ?
 		`;
@@ -201,9 +257,11 @@ const getMemberBirthday = async (guildId, memberId) => {
 };
 
 module.exports = {
+	insertBirthdayConfiguration,
 	deleteBirthday,
 	insertBirthday,
-	getBirthdayConf,
+	getBirthdayConfiguration,
 	getMemberBirthday,
 	updateBirthday,
+	updateBirthdayConfiguration,
 };
