@@ -5,6 +5,29 @@ const messageHelper = require('../helper/message');
 const { Birthday, Main } = require('../language/fr.json');
 
 /**
+ * Check if the guild has configured the birthday feature.
+ * @param {CommandInteraction} interaction
+ * @returns `true` if birthday feature is setup on the guild, `false` otherwise
+ */
+const checkSetup = async (interaction) => {
+
+	try {
+
+		const guild = interaction.guild;
+
+		// Check if birthday feature has been configured
+		const currentSetup = await databaseHelper.getBirthdayConf(guild.id);
+		return Boolean(currentSetup);
+
+	} catch (error) {
+
+		console.log(error);
+
+	}
+
+};
+
+/**
  * Add or edit the member's birthday.
  * @param {CommandInteraction} interaction
  */
@@ -15,8 +38,7 @@ const manageBirthday = async (interaction) => {
 		const guild = interaction.guild;
 
 		// Check if birthday feature has been configured
-		const currentSetup = await databaseHelper.getBirthdayConf(guild.id);
-		const isCurrentSetup = Boolean(currentSetup);
+		const isCurrentSetup = await checkSetup(interaction);
 
 		if (!isCurrentSetup) {
 			const embedNoSetupOptions = {
@@ -68,7 +90,6 @@ const addBirthday = async (interaction) => {
 		};
 
 		messageHelper.createReply(interaction, embedSuccessOptions, null);
-		return;
 
 	} catch (error) {
 
@@ -114,7 +135,6 @@ const editBirthday = async (interaction, memberBirthday) => {
 			};
 
 			messageHelper.createReply(interaction, embedSuccessOptions, null);
-			return;
 
 		} else {
 
