@@ -30,7 +30,7 @@ const manageBirthday = async (interaction) => {
 
 		// Get member birthday if already exists
 		const memberId = interaction.member.id;
-		const memberBirthday = await databaseHelper.getMemberBirthday(memberId, guild.id);
+		const memberBirthday = await databaseHelper.getMemberBirthday(guild.id, memberId);
 
 		// If birthday exists, ask modification else add birthday
 		if (memberBirthday) {

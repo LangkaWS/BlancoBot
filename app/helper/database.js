@@ -150,7 +150,7 @@ const getBirthdayConf = async (guildId) => {
  * @param {number} guildId the ID of the guild
  * @returns the month and day of the member birthday
  */
-const getMemberBirthday = async (memberId, guildId) => {
+const getMemberBirthday = async (guildId, memberId) => {
 
 	try {
 
