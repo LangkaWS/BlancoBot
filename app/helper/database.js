@@ -17,7 +17,7 @@ const getConnection = async () => {
 		});
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 };
@@ -47,7 +47,7 @@ const executeQuery = async (query, ...args) => {
 		return records;
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	} finally {
 		con.end;
 	}
@@ -78,7 +78,7 @@ const insertBirthday = async (guildId, memberId, day, month) => {
 		await executeQuery(query, guildId, memberId, day, month);
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 };
@@ -108,7 +108,7 @@ const updateBirthday = async (guildId, memberId, day, month) => {
 		await executeQuery(query, day, month, guildId, memberId);
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 };
@@ -133,7 +133,7 @@ const deleteBirthday = async (guildId, memberId) => {
 		await executeQuery(query, guildId, memberId);
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 
@@ -164,7 +164,7 @@ const getBirthdayConf = async (guildId) => {
 		return record;
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 };
@@ -194,7 +194,7 @@ const getMemberBirthday = async (guildId, memberId) => {
 		return record;
 
 	} catch (error) {
-		throw new SQLException(error);
+		throw SQLException(error);
 	}
 
 
