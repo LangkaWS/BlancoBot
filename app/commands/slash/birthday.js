@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const { Birthday } = require('../../language/fr.json');
+const { Birthday, Main } = require('../../language/fr.json');
 
 const data = new SlashCommandBuilder()
 	.setName(Birthday.CommandName)
@@ -9,6 +9,10 @@ const data = new SlashCommandBuilder()
 	.setDefaultMemberPermissions(null)
 	.addSubcommand(subcommand =>
 		subcommand
+	.addSubcommand(subcommandAddConf =>
+		subcommandAddConf
+			.setName(Main.ConfigureCommandName)
+			.setDescription(Birthday.ConfigureCommandDescription))
 			.setName(Birthday.SubcommandAddName)
 			.setDescription(Birthday.SubcommandAddDescription)
 			.addIntegerOption(option =>
@@ -38,6 +42,9 @@ const execute = async (interaction) => {
 	const birthdayLibrary = require('../../library/birthday');
 	const subcommand = interaction.options.getSubcommand();
 	switch (subcommand) {
+		case Main.ConfigureCommandName:
+			await birthdayLibrary.configure(interaction);
+			break;
 		case Birthday.SubcommandAddName:
 			await birthdayLibrary.manageBirthday(interaction);
 			break;

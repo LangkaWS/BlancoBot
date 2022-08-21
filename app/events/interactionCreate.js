@@ -17,7 +17,7 @@ module.exports = {
 
 			const originalCommandName = interaction.message.interaction.commandName;
 
-			if (interaction.isButton() && originalCommandName === `${Main.ConfigureCommandName} ${Birthday.CommandName}`) {
+			if (interaction.isButton() && originalCommandName === `${Birthday.CommandName} ${Main.ConfigureCommandName}`) {
 				return;
 			}
 
