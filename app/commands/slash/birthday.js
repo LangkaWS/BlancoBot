@@ -7,14 +7,18 @@ const data = new SlashCommandBuilder()
 	.setDescription(Birthday.CommandDescription)
 	.setDMPermission(false)
 	.setDefaultMemberPermissions(null)
-	.addSubcommand(subcommandAddConf =>
-		subcommandAddConf
-			.setName(Main.ConfigureCommandName)
-			.setDescription(Birthday.ConfigureCommandDescription))
-	.addSubcommand(subcommandRemoveConf =>
-		subcommandRemoveConf
-			.setName(Main.RemoveConfigurationCommandName)
-			.setDescription(Birthday.RemoveConfigurationCommandDescription))
+	.addSubcommandGroup(groupConfigure =>
+		groupConfigure
+			.setName(Main.ConfigurationCommandName)
+			.setDescription(Main.ConfigurationCommandName)
+			.addSubcommand(subcommandAddConf =>
+				subcommandAddConf
+					.setName(Main.AddCommandName)
+					.setDescription(Birthday.ConfigureCommandDescription))
+			.addSubcommand(subcommandRemoveConf =>
+				subcommandRemoveConf
+					.setName(Main.RemoveCommandName)
+					.setDescription(Birthday.RemoveConfigurationCommandDescription)))
 	.addSubcommand(subcommandAddBirthday =>
 		subcommandAddBirthday
 			.setName(Birthday.SubcommandAddName)
@@ -46,10 +50,10 @@ const execute = async (interaction) => {
 	const birthdayLibrary = require('../../library/birthday');
 	const subcommand = interaction.options.getSubcommand();
 	switch (subcommand) {
-		case Main.ConfigureCommandName:
+		case Main.AddCommandName:
 			await birthdayLibrary.configure(interaction);
 			break;
-		case Main.RemoveConfigurationCommandName:
+		case Main.RemoveCommandName:
 			await birthdayLibrary.removeConfiguration(interaction);
 			break;
 		case Birthday.SubcommandAddName:

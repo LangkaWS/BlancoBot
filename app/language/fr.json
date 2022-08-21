@@ -30,11 +30,13 @@
 		"SubcommandRemoveDescription": "Retire ton anniversaire"
 	},
 	"Main": {
+		"AddCommandName": "ajouter",
 		"CancelConfig": "La configuration est annulée.",
+		"ConfigurationCommandName": "configuration",
 		"ConfigureCommandName": "configurer",
 		"ConfigureCommandDescription": "Configure Blanco sur ton serveur",
 		"InteractionTimeout": "Tu as mis trop de temps pour répondre à l'interaction.\rL'interaction est annulée.",
 		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité.",
-		"RemoveConfigurationCommandName": "supprimer-configuration"
+		"RemoveCommandName": "supprimer"
 	}
 }

@@ -75,7 +75,7 @@ const configure = async (interaction) => {
 				channel: currentConf.channelId,
 				message: currentConf.message,
 			})
-			: Birthday.NoSetup;
+			: Birthday.NoConfigurationFound;
 
 		const embedOptionsAskEditConf = {
 			type: 'BIRTHDAY',
