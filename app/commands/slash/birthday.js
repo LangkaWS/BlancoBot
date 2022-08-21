@@ -7,12 +7,12 @@ const data = new SlashCommandBuilder()
 	.setDescription(Birthday.CommandDescription)
 	.setDMPermission(false)
 	.setDefaultMemberPermissions(null)
-	.addSubcommand(subcommand =>
-		subcommand
 	.addSubcommand(subcommandAddConf =>
 		subcommandAddConf
 			.setName(Main.ConfigureCommandName)
 			.setDescription(Birthday.ConfigureCommandDescription))
+	.addSubcommand(subcommandAddBirthday =>
+		subcommandAddBirthday
 			.setName(Birthday.SubcommandAddName)
 			.setDescription(Birthday.SubcommandAddDescription)
 			.addIntegerOption(option =>
@@ -29,8 +29,8 @@ const data = new SlashCommandBuilder()
 					.setRequired(true)
 					.setMinValue(1)
 					.setMaxValue(12)))
-	.addSubcommand(subcommand =>
-		subcommand
+	.addSubcommand(subcommandRemoveBirthday =>
+		subcommandRemoveBirthday
 			.setName(Birthday.SubcommandRemoveName)
 			.setDescription(Birthday.SubcommandRemoveDescription));
 
