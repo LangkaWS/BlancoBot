@@ -23,7 +23,7 @@
 		"MonthOptionName": "mois",
 		"MonthOptionDescription": "Saisis le mois (entre 1 et 12)",
 		"NoBirthdayFound": "Tu n'as pas d'anniversaire enregistré.",
-		"NoConfigurationFound": "Ton serveur n'est pas encore configuré pour utiliser mon service \"Annonce des anniversaires\". Veux-tu le configurer maintenant ?",
+		"NoConfigurationFound": "Ton serveur n'est pas encore configuré pour utiliser mon service \"Annonce des anniversaires\". Veux-tu le configurer maintenant ?\rNote : J'utiliserai ce canal pour annoncer les anniversaires. Pour modifier le canal, cliques sur \"Non\" puis refais la commande dans le canal dans lequel tu veux que j'annonce les anniversaires.",
 		"NoSetupToRemove": "Ton serveur n'est pas configuré pour la fonctionnalité \"Anniversaires\", il n'y a rien à supprimer.",
 		"RemoveConfigurationCommandDescription": "Supprime la configuration de la fonctionnalité \"Anniversaires\"",
 		"RemoveConfigurationConfirm": "La configuration des anniversaires a bien été supprimée.",
