@@ -11,6 +11,10 @@ const data = new SlashCommandBuilder()
 		subcommandAddConf
 			.setName(Main.ConfigureCommandName)
 			.setDescription(Birthday.ConfigureCommandDescription))
+	.addSubcommand(subcommandRemoveConf =>
+		subcommandRemoveConf
+			.setName(Main.RemoveConfigurationCommandName)
+			.setDescription(Birthday.RemoveConfigurationCommandDescription))
 	.addSubcommand(subcommandAddBirthday =>
 		subcommandAddBirthday
 			.setName(Birthday.SubcommandAddName)
@@ -44,6 +48,9 @@ const execute = async (interaction) => {
 	switch (subcommand) {
 		case Main.ConfigureCommandName:
 			await birthdayLibrary.configure(interaction);
+			break;
+		case Main.RemoveConfigurationCommandName:
+			await birthdayLibrary.removeConfiguration(interaction);
 			break;
 		case Birthday.SubcommandAddName:
 			await birthdayLibrary.manageBirthday(interaction);

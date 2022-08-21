@@ -103,6 +103,69 @@ const configure = async (interaction) => {
 };
 
 /**
+ * Remove the birthday feature configuration from the guild.
+ * @param {CommandInteraction} interaction
+ */
+const removeConfiguration = async (interaction) => {
+
+	try {
+
+		const guildId = interaction.guildId;
+
+		// Get current configuration
+		const currentConf = await databaseHelper.getBirthdayConfiguration(guildId);
+		const isCurrentConf = Boolean(currentConf);
+
+		if (!isCurrentConf) {
+
+			const embedNoSetupOptions = {
+				type: 'BIRTHDAY',
+				message: Birthday.NoSetupToRemove,
+			};
+
+			messageHelper.createReply(interaction, embedNoSetupOptions, null);
+			return;
+
+		}
+
+		const embedOptionsAskRemoveConf = {
+			type: 'BIRTHDAY',
+			message: Birthday.AskRemoveConfiguration,
+		};
+
+		const buttonsOptionsAskRemoveConfOptions = messageHelper.createYesNoButtonsOptions();
+
+		const replyAskRemoveConf = await messageHelper.createReply(interaction, embedOptionsAskRemoveConf, buttonsOptionsAskRemoveConfOptions, true);
+
+		// If no, cancel
+		if (replyAskRemoveConf.customId !== 'yes') {
+
+			const embedOptionsCancel = {
+				type: 'BIRTHDAY',
+				message: Main.CancelConfig,
+			};
+
+			messageHelper.createReply(interaction, embedOptionsCancel, null);
+			return;
+
+		}
+
+		await databaseHelper.deleteBirthdayConfiguration(guildId);
+
+		const embedRemoveConfigConfirmOptions = {
+			type: 'BIRTHDAY',
+			message: Birthday.RemoveConfigurationConfirm,
+		};
+
+		messageHelper.createReply(interaction, embedRemoveConfigConfirmOptions, null);
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
+/**
  * Check if the guild has configured the birthday feature.
  * @param {CommandInteraction} interaction
  * @returns `true` if birthday feature is setup on the guild, `false` otherwise
@@ -314,4 +377,5 @@ module.exports = {
 	configure,
 	manageBirthday,
 	removeBirthday,
+	removeConfiguration,
 };

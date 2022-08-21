@@ -6,8 +6,10 @@
 		"AskMessagePlaceholder": "Tu peux utiliser {name} (pseudo du membre) pour personnaliser le message. Ex : 'Joyeux anniv {name}'",
 		"AskMessageLabel": "Quel message dois-je utiliser ?",
 		"AskMessageTitle": "Message d'annonce",
+		"AskRemoveConfiguration": "Veux-tu vraiment supprimer la configuration des anniversaires ?",
 		"CommandName": "anniversaire",
 		"CommandDescription": "Ajoutes ou enlèves ton anniversaire",
+		"ConfigConfirm": "La nouvelle configuration des anniversaires a bien été enregistrée.",
 		"ConfigureCommandDescription": "Configure la fonctionnalité \"Anniversaires\". J'utiliserai ce canal pour annoncer les anniversaires.",
 		"DayOptionName": "jour",
 		"DayOptionDescription": "Saisis le jour (entre 1 et 31)",
@@ -18,18 +20,21 @@
 		"MonthOptionDescription": "Saisis le mois (entre 1 et 12)",
 		"NoBirthdayFound": "Tu n'as pas d'anniversaire enregistré.",
 		"NoConfigurationFound": "Ton serveur n'est pas encore configuré pour utiliser mon service \"Annonce des anniversaires\". Veux-tu le configurer maintenant ?",
+		"NoSetupToRemove": "Ton serveur n'est pas configuré pour la fonctionnalité \"Anniversaires\", il n'y a rien à supprimer.",
+		"RemoveConfigurationCommandDescription": "Supprime la configuration de la fonctionnalité \"Anniversaires\"",
+		"RemoveConfigurationConfirm": "La configuration des anniversaires a bien été supprimée.",
 		"RemoveConfirm": "Ton anniversaire a bien été supprimé.",
 		"SubcommandAddName": "ajouter",
 		"SubcommandAddDescription": "Ajoute ou modifie ton anniversaire",
 		"SubcommandRemoveName": "retirer",
-		"SubcommandRemoveDescription": "Retire ton anniversaire",
-		"ConfigConfirm": "La nouvelle configuration des anniversaires a bien été enregistrée."
+		"SubcommandRemoveDescription": "Retire ton anniversaire"
 	},
 	"Main": {
 		"CancelConfig": "La configuration est annulée.",
 		"ConfigureCommandName": "configurer",
 		"ConfigureCommandDescription": "Configure Blanco sur ton serveur",
 		"InteractionTimeout": "Tu as mis trop de temps pour répondre à l'interaction.\rL'interaction est annulée.",
-		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité."
+		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité.",
+		"RemoveConfigurationCommandName": "supprimer-configuration"
 	}
 }
