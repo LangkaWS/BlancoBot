@@ -42,6 +42,18 @@ const createEmbed = (options) => {
 };
 
 /**
+ * Create an embed message.
+ * @param {{title: string, message: string, type: 'BIRTHDAY'}} options the embed options
+ * @returns an embed message ready to be sent
+ */
+const createEmbedMessage = (options) => {
+	return {
+		ephemeral: false,
+		embeds: [createEmbed(options)],
+	};
+};
+
+/**
  * Create interaction reply options.
  * @param {{title: string, message: string, type: 'ADMIN'}} embedOptions the embed options
  * @param {{ type: 'BUTTON', id?: string, label?: string, style?: 'Primary'|'Secondary'|'Success'|'Danger'|'Link'}} componentsOptions the component options
@@ -199,6 +211,7 @@ const createYesNoButtonsOptions = () => {
 };
 
 module.exports = {
+	createEmbedMessage,
 	createModalReply,
 	createReply,
 	createYesNoButtonsOptions,

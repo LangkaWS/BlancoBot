@@ -1,3 +1,5 @@
+const { CronJob } = require('cron');
+
 const databaseHelper = require('../helper/database');
 const languageHelper = require('../helper/language');
 const messageHelper = require('../helper/message');
@@ -52,6 +54,72 @@ const addBirthday = async (interaction) => {
 		console.log(error);
 
 	}
+
+};
+
+const checkBirthdays = async (client) => {
+
+	try {
+
+		const job = new CronJob('00 08 * * *', async () => {
+
+			const today = new Date();
+			const month = today.getMonth() + 1;
+			const day = today.getDate();
+
+			const query = `
+				SELECT 
+					b.member_id,
+					b.guild_id,
+					b.month,
+					b.day,
+					cb.channel_id,
+					cb.message,
+					cb.enabled
+				FROM birthday b
+				INNER JOIN 
+					conf_birthday cb
+					ON cb.guild_id = b.guild_id
+				WHERE 
+					month = ? 
+					AND day = ?
+			`;
+			const birthdays = await databaseHelper.customSelect(query, [month, day]);
+
+			if (!birthdays || (Array.isArray(birthdays) && !birthdays.length)) return;
+
+			if (Array.isArray(birthdays)) {
+				birthdays.forEach(birthday => {
+					announceBirthday(client, birthday);
+				});
+			} else {
+				announceBirthday(client, birthdays);
+			}
+
+		});
+
+		job.start();
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
+const announceBirthday = (client, birthday) => {
+
+	if (!birthday.enabled) return;
+
+	const guild = client.guilds.resolve(birthday.guild_id);
+	const channel = guild.channels.resolve(birthday.channel_id);
+	const message = birthday.message.replace(/{name}/g, `<@${birthday.member_id}>`);
+
+	const embedOptions = {
+		type: 'BIRTHDAY',
+		message: message,
+	};
+
+	channel.send(messageHelper.createEmbedMessage(embedOptions));
 
 };
 
@@ -509,6 +577,7 @@ const updateEnabledStatus = async (interaction, enabled) => {
 
 module.exports = {
 	activate,
+	checkBirthdays,
 	configure,
 	deactivate,
 	manageBirthday,

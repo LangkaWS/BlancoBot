@@ -159,8 +159,21 @@ const select = async (tableName, filters, fields = []) => {
 				${preparedFilters.names}
 		`;
 
-		const [records] = await executeQuery(query, preparedFilters.values);
-		return records;
+		const records = await executeQuery(query, preparedFilters.values);
+		return records.length > 1 ? records : records[0];
+
+	} catch (error) {
+		throw SQLException(error);
+	}
+
+};
+
+const customSelect = async (query, values) => {
+
+	try {
+
+		const records = await executeQuery(query, values);
+		return records.length > 1 ? records : records[0];
 
 	} catch (error) {
 		throw SQLException(error);
@@ -211,6 +224,7 @@ const prepareFilters = (filters) => {
 module.exports = {
 	insert,
 	select,
+	customSelect,
 	update,
 	remove,
 };
