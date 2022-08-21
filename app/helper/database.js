@@ -34,16 +34,16 @@ const SQLException = (message) => {
 /**
  * Execute a query with the given options.
  * @param {string} query
- * @param  {...any} args options
+ * @param  {Array<string|number|boolean>} values values to insert/update/delete
  * @returns selected rows
  */
-const executeQuery = async (query, ...args) => {
+const executeQuery = async (query, values) => {
 	let con = null;
 
 	try {
 
 		con = await getConnection();
-		const [records] = await con.execute(query, [...args]);
+		const [records] = await con.execute(query, values);
 		return records;
 
 	} catch (error) {
@@ -55,27 +55,24 @@ const executeQuery = async (query, ...args) => {
 };
 
 /**
- * Insert the member's birthday in database.
- * @param {number} guildId the ID of the member's guild
- * @param {number} memberId the ID of the member
- * @param {number} day the birthday day
- * @param {number} month the birthday month
+ * Insert data into database.
+ * @param {string} tableName the name of the table in which to insert
+ * @param {Array<{ fieldName: string, value: string|number }>} fields the fields to insert
  */
-const insertBirthday = async (guildId, memberId, day, month) => {
+const insert = async (tableName, fields) => {
 
 	try {
+
+		const preparedFields = prepareFields(fields);
 
 		const query = `
 			INSERT INTO
-				birthday
+				${tableName}
 			SET
-				guild_id = ?,
-				member_id = ?,
-				day = ?,
-				month = ?
+				${preparedFields.names}
 		`;
 
-		await executeQuery(query, guildId, memberId, day, month);
+		await executeQuery(query, preparedFields.values);
 
 	} catch (error) {
 		throw SQLException(error);
@@ -84,135 +81,24 @@ const insertBirthday = async (guildId, memberId, day, month) => {
 };
 
 /**
- * Insert a birthday configuration in databse.
- * @param {number} guildId the guild ID
- * @param {number} channelId the announcement channel ID
- * @param {string} message the announcement message
+ * Delete data from database.
+ * @param {string} tableName the name of the table in which to delete
+ * @param {Array<{ fieldName: string, value: string|number }>} filters the filter to use to filter data to delete
  */
-const insertBirthdayConfiguration = async (guildId, channelId, message) => {
+const remove = async (tableName, filters) => {
 
 	try {
 
-		const query = `
-			INSERT INTO
-				conf_birthday
-			SET
-				guild_id = ?,
-				channel_id = ?,
-				message = ?,
-				enabled = 1
-		`;
-
-		await executeQuery(query, guildId, channelId, message);
-
-	} catch (error) {
-		throw SQLException(error);
-	}
-
-};
-
-/**
- * Update the member's birthday in database.
- * @param {number} guildId the ID of the member's guild
- * @param {number} memberId the ID of the member
- * @param {number} day the birthday day
- * @param {number} month the birthday month
- */
-const updateBirthday = async (guildId, memberId, day, month) => {
-
-	try {
-
-		const query = `
-			UPDATE
-				birthday
-			SET
-				day = ?,
-				month = ?
-			WHERE 
-				guild_id = ?
-				AND member_id = ? 
-		`;
-
-		await executeQuery(query, day, month, guildId, memberId);
-
-	} catch (error) {
-		throw SQLException(error);
-	}
-
-};
-
-/**
- * Update birthday configuration in database.
- * @param {number} guildId the guild ID
- * @param {number} channelId the announcement channel ID
- * @param {string} message the announcement message
- */
-const updateBirthdayConfiguration = async (guildId, channelId, message) => {
-
-	try {
-
-		const query = `
-			UPDATE
-				conf_birthday
-			SET
-				channel_id = ?,
-				message = ?
-			WHERE 
-				guild_id = ?
-		`;
-
-		await executeQuery(query, channelId, message, guildId);
-
-	} catch (error) {
-		throw SQLException(error);
-	}
-
-};
-
-/**
- * Update automatic birthday announcement status in database.
- * @param {number} guildId the guild Id
- * @param {boolean} enabled `true` to enabled automatic birthday announcement, `false` to disable
- */
-const updateBirthdayEnabledStatus = async (guildId, enabled) => {
-
-	try {
-
-		const query = `
-			UPDATE
-				conf_birthday
-			SET
-				enabled = ?
-			WHERE 
-				guild_id = ?
-		`;
-
-		await executeQuery(query, enabled, guildId);
-
-	} catch (error) {
-		throw SQLException(error);
-	}
-
-};
-
-/**
- * Delete the member's birthday from database.
- * @param {number} guildId the guild ID
- * @param {number} memberId the member ID
- */
-const deleteBirthday = async (guildId, memberId) => {
-
-	try {
+		const preparedFilters = prepareFilters(filters);
 
 		const query = `
 			DELETE FROM
-				birthday
-			WHERE 
-				guild_id = ?
-				AND member_id = ? 
+				${tableName}
+			WHERE
+				${preparedFilters.names}
 		`;
 
-		await executeQuery(query, guildId, memberId);
+		await executeQuery(query, preparedFilters.values);
 
 	} catch (error) {
 		throw SQLException(error);
@@ -221,52 +107,60 @@ const deleteBirthday = async (guildId, memberId) => {
 };
 
 /**
- * Delete the guild's birthday configuration from database.
- * @param {number} guildId the guild ID
+ * Update data in the database.
+ * @param {string} tableName the name of the table in which to update
+ * @param {Array<{ fieldName: string, value: string|number|boolean }>} fields the fields to update and their value
+ * @param {Array<{ fieldName: string, value: string|number }>} filters the filter to use to filter data to update
  */
-const deleteBirthdayConfiguration = async (guildId) => {
+const update = async (tableName, fields, filters) => {
 
 	try {
+
+		const preparedFields = prepareFields(fields);
+		const preparedFilters = prepareFilters(filters);
 
 		const query = `
-			DELETE FROM
-				conf_birthday
-			WHERE 
-				guild_id = ?
+			UPDATE
+				${tableName}
+			SET
+				${preparedFields.names}
+			WHERE
+				${preparedFilters.names}
 		`;
 
-		await executeQuery(query, guildId);
+		await executeQuery(query, [...preparedFields.values, ...preparedFilters.values]);
 
 	} catch (error) {
 		throw SQLException(error);
 	}
 
-
 };
 
 /**
- * Get birthday configuration in database.
- * @param {number} guildId the ID of the guild the configuration belongs to
- * @returns the birthday configuration
+ * Select records from database.
+ * @param {string} tableName the name of the table to select from
+ * @param {Array<{ fieldName: string, value: string|number }>} filters the filter to use to filter data to update
+ * @param {string} fields (optional) the fields to select
+ * @returns the records
  */
-const getBirthdayConfiguration = async (guildId) => {
+const select = async (tableName, filters, fields = []) => {
 
 	try {
+
+		const fieldsNames = fields?.length ? fields : '*';
+		const preparedFilters = prepareFilters(filters);
 
 		const query = `
 			SELECT
-				guild_id AS guildId,
-				channel_id AS channelId,
-				message,
-				enabled
+				${fieldsNames}
 			FROM
-				conf_birthday
+				${tableName}
 			WHERE
-				guild_id = ?
+				${preparedFilters.names}
 		`;
 
-		const [record] = await executeQuery(query, guildId);
-		return record;
+		const [records] = await executeQuery(query, preparedFilters.values);
+		return records;
 
 	} catch (error) {
 		throw SQLException(error);
@@ -275,44 +169,48 @@ const getBirthdayConfiguration = async (guildId) => {
 };
 
 /**
- * Get the birthday (month and day) of a member
- * @param {number} memberId the ID of the member
- * @param {number} guildId the ID of the guild
- * @returns the month and day of the member birthday
+ * Format the fields to be usable in query.
+ * @param {Array<{ fieldName: string, value: string|number }>} fields
+ * @returns {{ names: Array<string>, values: Array<string|number|null> }} an object with fields names and fields values
  */
-const getMemberBirthday = async (guildId, memberId) => {
+const prepareFields = (fields) => {
 
-	try {
+	const result = {
+		names: '',
+		values: null,
+	};
 
-		const query = `
-			SELECT
-				month,
-				day
-			FROM
-				birthday
-			WHERE
-				guild_id = ?
-				AND member_id = ?
-		`;
+	const fieldsNames = fields.map(field => `${field.fieldName} = ?`);
+	const fieldsNamesStr = fieldsNames.join(', ');
+	result.names = fieldsNamesStr;
 
-		const [record] = await executeQuery(query, guildId, memberId);
-		return record;
-
-	} catch (error) {
-		throw SQLException(error);
+	if (fields[0].value !== undefined) {
+		const fieldsValues = fields.map(field => field.value);
+		result.values = fieldsValues;
 	}
 
+	return result;
+
+};
+
+/**
+ * Format the filters to be usable in query.
+ * @param {Array<{ fieldName: string, value: string|number }>} filters
+ * @returns {{ names: Array<string>, values: Array<string|number> }} an object with filters names and filters values
+ */
+const prepareFilters = (filters) => {
+
+	const filtersNames = filters.map(filter => `${filter.fieldName} = ?`);
+	const filtersNamesStr = filtersNames.join(' AND ');
+	const filtersValues = filters.map(filter => filter.value);
+
+	return { names: filtersNamesStr, values: filtersValues };
 
 };
 
 module.exports = {
-	insertBirthdayConfiguration,
-	deleteBirthday,
-	deleteBirthdayConfiguration,
-	insertBirthday,
-	getBirthdayConfiguration,
-	getMemberBirthday,
-	updateBirthday,
-	updateBirthdayConfiguration,
-	updateBirthdayEnabledStatus,
+	insert,
+	select,
+	update,
+	remove,
 };

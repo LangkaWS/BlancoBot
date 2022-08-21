@@ -31,7 +31,14 @@ const addBirthday = async (interaction) => {
 		const day = interaction.options.getInteger(Birthday.DayOptionName);
 		const month = interaction.options.getInteger(Birthday.MonthOptionName);
 
-		await databaseHelper.insertBirthday(interaction.guild.id, interaction.member.id, day, month);
+		const fields = [
+			{ fieldName: 'guild_id', value: interaction.guild.id },
+			{ fieldName: 'member_id', value: interaction.member.id },
+			{ fieldName: 'day', value: day },
+			{ fieldName: 'month', value: month },
+		];
+
+		await databaseHelper.insert('birthday', fields);
 
 		const embedSuccessOptions = {
 			type: 'BIRTHDAY',
@@ -60,7 +67,11 @@ const checkSetup = async (interaction) => {
 		const guild = interaction.guild;
 
 		// Check if birthday feature has been configured
-		const currentSetup = await databaseHelper.getBirthdayConfiguration(guild.id);
+		const filters = [
+			{ fieldName: 'guild_id', value: guild.id },
+		];
+		const currentSetup = await databaseHelper.select('conf_birthday', filters);
+
 		return Boolean(currentSetup);
 
 	} catch (error) {
@@ -82,13 +93,16 @@ const configure = async (interaction) => {
 		const guildId = interaction.guildId;
 
 		// Get current configuration
-		const currentConf = await databaseHelper.getBirthdayConfiguration(guildId);
+		const filters = [
+			{ fieldName: 'guild_id', value: guildId },
+		];
+		const currentConf = await databaseHelper.select('conf_birthday', filters);
 		const isCurrentConf = Boolean(currentConf);
 
 		// Ask user if he wants to create or edit current configuration
 		const messageAskEditConf = isCurrentConf
 			?	languageHelper.interpolate(Birthday.AskEditConfiguration, {
-				channel: currentConf.channelId,
+				channel: currentConf.channel_id,
 				message: currentConf.message,
 			})
 			: Birthday.NoConfigurationFound;
@@ -147,11 +161,22 @@ const configure = async (interaction) => {
 
 		if (isCurrentConf) {
 
-			await databaseHelper.updateBirthdayConfiguration(guildId, interaction.channelId, replyAskMessageValue);
+			const fields = [
+				{ fieldName: 'channel_id', value: interaction.channelId },
+				{ fieldName: 'message', value: replyAskMessageValue },
+			];
+
+			await databaseHelper.update('conf_birthday', fields, filters);
 
 		} else {
 
-			await databaseHelper.insertBirthdayConfiguration(guildId, interaction.channelId, replyAskMessageValue);
+			const fields = [
+				{ fieldName: 'guild_id', value: guildId },
+				{ fieldName: 'channel_id', value: interaction.channelId },
+				{ fieldName: 'message', value: replyAskMessageValue },
+				{ fieldName: 'enabled', value: 1 },
+			];
+			await databaseHelper.insert('conf_birthday', fields);
 
 		}
 
@@ -213,7 +238,17 @@ const editBirthday = async (interaction, memberBirthday) => {
 			const day = interaction.options.getInteger(Birthday.DayOptionName);
 			const month = interaction.options.getInteger(Birthday.MonthOptionName);
 
-			await databaseHelper.updateBirthday(askEditBirthdayReply.guild.id, askEditBirthdayReply.member.id, day, month);
+			const fields = [
+				{ fieldName: 'day', value: day },
+				{ fieldName: 'month', value: month },
+			];
+
+			const filters = [
+				{ fieldName: 'guild_id', value: askEditBirthdayReply.guild.id },
+				{ fieldName: 'member_id', value: askEditBirthdayReply.member.id },
+			];
+
+			await databaseHelper.update('birthday', fields, filters);
 
 			const embedSuccessOptions = {
 				type: 'BIRTHDAY',
@@ -267,7 +302,15 @@ const manageBirthday = async (interaction) => {
 
 		// Get member birthday if already exists
 		const memberId = interaction.member.id;
-		const memberBirthday = await databaseHelper.getMemberBirthday(guild.id, memberId);
+
+		const fields = ['day', 'month'];
+
+		const filters = [
+			{ fieldName: 'guild_id', value: guild.id },
+			{ fieldName: 'member_id', value: memberId },
+		];
+
+		const memberBirthday = await databaseHelper.select('birthday', filters, fields);
 
 		// If birthday exists, ask modification else add birthday
 		if (memberBirthday) {
@@ -311,7 +354,15 @@ const removeBirthday = async (interaction) => {
 
 		// Get member birthday
 		const memberId = interaction.member.id;
-		const memberBirthday = await databaseHelper.getMemberBirthday(guild.id, memberId);
+
+		const fields = ['day', 'month'];
+
+		const filters = [
+			{ fieldName: 'guild_id', value: guild.id },
+			{ fieldName: 'member_id', value: memberId },
+		];
+
+		const memberBirthday = await databaseHelper.select('birthday', filters, fields);
 
 		if (!memberBirthday) {
 
@@ -325,7 +376,7 @@ const removeBirthday = async (interaction) => {
 
 		}
 
-		await databaseHelper.deleteBirthday(guild.id, memberId);
+		await databaseHelper.remove('birthday', filters);
 
 		const embedSuccessOptions = {
 			type: 'BIRTHDAY',
@@ -353,7 +404,10 @@ const removeConfiguration = async (interaction) => {
 		const guildId = interaction.guildId;
 
 		// Get current configuration
-		const currentConf = await databaseHelper.getBirthdayConfiguration(guildId);
+		const filters = [
+			{ fieldName: 'guild_id', value: guildId },
+		];
+		const currentConf = await databaseHelper.select('conf_birthday', filters);
 		const isCurrentConf = Boolean(currentConf);
 
 		if (!isCurrentConf) {
@@ -390,7 +444,7 @@ const removeConfiguration = async (interaction) => {
 
 		}
 
-		await databaseHelper.deleteBirthdayConfiguration(guildId);
+		await databaseHelper.remove('conf_birthday', filters);
 
 		const embedRemoveConfigConfirmOptions = {
 			type: 'BIRTHDAY',
@@ -427,7 +481,16 @@ const updateEnabledStatus = async (interaction, enabled) => {
 		}
 
 		const guildId = interaction.guild.id;
-		await databaseHelper.updateBirthdayEnabledStatus(guildId, enabled);
+
+		const fields = [
+			{ fieldName: 'enabled', value: enabled },
+		];
+
+		const filters = [
+			{ fieldName: 'guild_id', value: guildId },
+		];
+
+		await databaseHelper.update('conf_birthday', fields, filters);
 
 		const embedStatusUpdateConfirmOptions = {
 			type: 'BIRTHDAY',
