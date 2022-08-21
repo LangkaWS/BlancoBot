@@ -170,6 +170,32 @@ const updateBirthdayConfiguration = async (guildId, channelId, message) => {
 };
 
 /**
+ * Update automatic birthday announcement status in database.
+ * @param {number} guildId the guild Id
+ * @param {boolean} enabled `true` to enabled automatic birthday announcement, `false` to disable
+ */
+const updateBirthdayEnabledStatus = async (guildId, enabled) => {
+
+	try {
+
+		const query = `
+			UPDATE
+				conf_birthday
+			SET
+				enabled = ?
+			WHERE 
+				guild_id = ?
+		`;
+
+		await executeQuery(query, enabled, guildId);
+
+	} catch (error) {
+		throw SQLException(error);
+	}
+
+};
+
+/**
  * Delete the member's birthday from database.
  * @param {number} guildId the guild ID
  * @param {number} memberId the member ID
@@ -288,4 +314,5 @@ module.exports = {
 	getMemberBirthday,
 	updateBirthday,
 	updateBirthdayConfiguration,
+	updateBirthdayEnabledStatus,
 };

@@ -1,5 +1,7 @@
 {
 	"Birthday": {
+		"ActivateConfigurationCommandDescription": "Active l'annonce automatique des anniversaires.",
+		"ActivationConfirm": "L'annonce automatique des anniversaire a bien été activée.",
 		"AddConfirm": "Ton anniversaire a bien été ajouté.",
 		"AlreadyRegistered": "Ton anniversaire est déjà enregistré avec la date : [date].\rVeux-tu le modifier ?",
 		"AskEditConfiguration": "Mon service \"Annonce des anniversaires\" est configuré de la façon suivante :\rCanal d'annonce : <#[channel]>\rMessage d'annonce :\r[message]\n\rVeux-tu modifier cette configuration ?\rNote : Pour modifier le canal, cliques sur \"Non\" puis refais la commande dans le canal dans lequel tu veux que j'annonce les anniversaires.",
@@ -13,6 +15,8 @@
 		"ConfigureCommandDescription": "Configure la fonctionnalité \"Anniversaires\". J'utiliserai ce canal pour annoncer les anniversaires.",
 		"DayOptionName": "jour",
 		"DayOptionDescription": "Saisis le jour (entre 1 et 31)",
+		"DeactivateConfigurationCommandDescription": "Désactive l'annonce automatique des anniversaires.",
+		"DectivationConfirm": "L'annonce automatique des anniversaire a bien été désactivée.",
 		"EditConfirm": "Ton anniversaire a bien été modifié.",	
 		"EmbedAnnounceTitle": "🥳 Joyeux anniversaire !",
 		"EmbedConfigurationTitle": "🥳 Configuration des anniversaires",
@@ -30,11 +34,13 @@
 		"SubcommandRemoveDescription": "Retire ton anniversaire"
 	},
 	"Main": {
+		"ActivateCommandName": "activer",
 		"AddCommandName": "ajouter",
 		"CancelConfig": "La configuration est annulée.",
 		"ConfigurationCommandName": "configuration",
 		"ConfigureCommandName": "configurer",
 		"ConfigureCommandDescription": "Configure Blanco sur ton serveur",
+		"DeactivateCommandName": "désactiver",
 		"InteractionTimeout": "Tu as mis trop de temps pour répondre à l'interaction.\rL'interaction est annulée.",
 		"NoSetup": "Je n'ai pas trouvé de configuration. L'interaction est annulée.\nContactes l'administrateur du serveur pour configurer cette fonctionnalité.",
 		"RemoveCommandName": "supprimer"

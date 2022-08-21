@@ -5,6 +5,22 @@ const messageHelper = require('../helper/message');
 const { Birthday, Main } = require('../language/fr.json');
 
 /**
+ * Activate or deactivate automatic birthday announcement on guild.
+ * @param {CommandInteraction} interaction
+ */
+const activate = async (interaction) => {
+
+	try {
+
+		await updateEnabledStatus(interaction, true);
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
+/**
  * Add the member's birthday.
  * @param {CommandInteraction} interaction
  */
@@ -146,6 +162,22 @@ const configure = async (interaction) => {
 
 		messageHelper.createReply(interaction, embedSuccessOptions, null);
 
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
+/**
+ * Deactivate automatic birthday announcement on guild.
+ * @param {CommandInteraction} interaction
+ */
+const deactivate = async (interaction) => {
+
+	try {
+
+		await updateEnabledStatus(interaction, false);
 
 	} catch (error) {
 		console.log(error);
@@ -373,8 +405,49 @@ const removeConfiguration = async (interaction) => {
 
 };
 
+/**
+ * Activate or deactivate automatic birthday announcement on guild.
+ * @param {CommandInteraction} interaction
+ * @param {boolean} enabled `true` to enabled automatic birthday announcement, `false` to disable
+ */
+const updateEnabledStatus = async (interaction, enabled) => {
+
+	try {
+
+		const isCurrentSetup = await checkSetup(interaction);
+
+		if (!isCurrentSetup) {
+			const embedNoSetupOptions = {
+				type: 'BIRTHDAY',
+				message: Main.NoSetup,
+			};
+
+			messageHelper.createReply(interaction, embedNoSetupOptions, null);
+			return;
+		}
+
+		const guildId = interaction.guild.id;
+		await databaseHelper.updateBirthdayEnabledStatus(guildId, enabled);
+
+		const embedStatusUpdateConfirmOptions = {
+			type: 'BIRTHDAY',
+			message: enabled
+				? Birthday.ActivationConfirm
+				: Birthday.DectivationConfirm,
+		};
+
+		messageHelper.createReply(interaction, embedStatusUpdateConfirmOptions, null);
+
+	} catch (error) {
+		console.log(error);
+	}
+
+};
+
 module.exports = {
+	activate,
 	configure,
+	deactivate,
 	manageBirthday,
 	removeBirthday,
 	removeConfiguration,
