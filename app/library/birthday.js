@@ -177,7 +177,7 @@ const checkSetup = async (interaction) => {
 		const guild = interaction.guild;
 
 		// Check if birthday feature has been configured
-		const currentSetup = await databaseHelper.getBirthdayConf(guild.id);
+		const currentSetup = await databaseHelper.getBirthdayConfiguration(guild.id);
 		return Boolean(currentSetup);
 
 	} catch (error) {
