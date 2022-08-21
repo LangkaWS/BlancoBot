@@ -56,24 +56,26 @@ const data = new SlashCommandBuilder()
  */
 const execute = async (interaction) => {
 	const birthdayLibrary = require('../../library/birthday');
+	const group = interaction.options.getSubcommandGroup();
 	const subcommand = interaction.options.getSubcommand();
-	switch (subcommand) {
-		case Main.AddCommandName:
+	const subcommandFullName = `${group} ${subcommand}`;
+	switch (subcommandFullName) {
+		case `${Main.ConfigurationCommandName} ${Main.AddCommandName}`:
 			await birthdayLibrary.configure(interaction);
 			break;
-		case Main.RemoveCommandName:
+		case `${Main.ConfigurationCommandName} ${Main.RemoveCommandName}`:
 			await birthdayLibrary.removeConfiguration(interaction);
 			break;
-		case Main.ActivateCommandName:
+		case `${Main.ConfigurationCommandName} ${Main.ActivateCommandName}`:
 			await birthdayLibrary.activate(interaction);
 			break;
-		case Main.DeactivateCommandName:
+		case `${Main.ConfigurationCommandName} ${Main.DeactivateCommandName}`:
 			await birthdayLibrary.deactivate(interaction);
 			break;
-		case Birthday.SubcommandAddName:
+		case `null ${Birthday.SubcommandAddName}`:
 			await birthdayLibrary.manageBirthday(interaction);
 			break;
-		case Birthday.SubcommandRemoveName:
+		case `null ${Birthday.SubcommandRemoveName}`:
 			await birthdayLibrary.removeBirthday(interaction);
 			break;
 	}
