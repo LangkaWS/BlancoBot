@@ -19,7 +19,7 @@ const createButtonComponent = (options) => {
 
 /**
  * Create an embed.
- * @param {{title: string, message: string, type: 'ADMIN'}} options the options of the embed
+ * @param {{title: string, message: string, type: 'BIRTHDAY'}} options the options of the embed
  * @returns an embed
  */
 const createEmbed = (options) => {
@@ -55,7 +55,7 @@ const createEmbedMessage = (options) => {
 
 /**
  * Create interaction reply options.
- * @param {{title: string, message: string, type: 'ADMIN'}} embedOptions the embed options
+ * @param {{title: string, message: string, type: 'BIRTHDAY'}} embedOptions the embed options
  * @param {{ type: 'BUTTON', id?: string, label?: string, style?: 'Primary'|'Secondary'|'Success'|'Danger'|'Link'}} componentsOptions the component options
  * @returns interaction reply options
  */
@@ -159,7 +159,7 @@ const createModalReplyOptions = (modalOptions) => {
 /**
  * Reply to an interaction and collect the user's reply interaction.
  * @param {CommandInteraction} interaction
- * @param {{ title: string, message: string, type: 'ADMIN'}} embedOptions the embed options
+ * @param {{ title: string, message: string, type: 'BIRTHDAY'}} embedOptions the embed options
  * @param {{ type: 'BUTTON'|'SELECT_MENU', id?: string, label?: string, style?: 'Primary'|'Secondary'|'Success'|'Danger'|'Link', min?: number, max?: number, choicesList?: Array}} componentsOptions the component options
  * @param {boolean} needReply does the interaction needs a reply from user
  * @returns {Promise<MessageComponentInteraction>} the user's interaction reply
