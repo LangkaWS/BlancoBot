@@ -57,6 +57,10 @@ const addBirthday = async (interaction) => {
 
 };
 
+/**
+ * Check automatically the birthdays.
+ * @param {Client} client
+ */
 const checkBirthdays = async (client) => {
 
 	try {
@@ -106,6 +110,11 @@ const checkBirthdays = async (client) => {
 
 };
 
+/**
+ * Send the birthday message in channel.
+ * @param {Client} client
+ * @param {{ member_id: number, guild_id: number, month: number, day: number, channel_id: number, message: string, enabled: boolean }} birthday the birthday from database
+ */
 const announceBirthday = (client, birthday) => {
 
 	if (!birthday.enabled) return;
